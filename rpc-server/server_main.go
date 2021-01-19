@@ -4,16 +4,22 @@ import (
 	"hello-go/rpc-server/server"
 	"log"
 	"net"
-	"net/http"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 func main() {
 	rpc.RegisterName("MathService", new(server.MathService))
-	rpc.HandleHTTP()
 	l, e := net.Listen("tcp", ":1234")
 	if e != nil {
 		log.Fatal("listen error:", e)
 	}
-	http.Serve(l, nil)
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			log.Println("jsonrpc.Serve: accept:", err.Error())
+			return
+		}
+		go jsonrpc.ServeConn(conn)
+	}
 }

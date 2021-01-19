@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"hello-go/rpc-server/server"
 	"log"
-	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 func main() {
-	client, err := rpc.DialHTTP("tcp", "localhost:1234")
+	client, err := jsonrpc.Dial("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
